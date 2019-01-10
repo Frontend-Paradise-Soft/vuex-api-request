@@ -1,0 +1,23 @@
+{
+  "name": "vuex-api-request",
+  "version": "0.2.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "prepublish": "./node_modules/.bin/babel src --out-dir lib"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
+  },
+  "author": "PS.F.",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
