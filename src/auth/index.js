@@ -1,21 +1,24 @@
-import Vue from 'vue'
-import store from '@/store'
 import Axios from 'axios'
 
-export default (config = {}) => ({
+export default ({
+  axiosConfig = {},
+  store,
+  authBinding = (state) => state.auth.accessToken,
+  authCompleted = (store) => store
+}) => ({
   install(Vue) {
-    Vue.prototype.$auth = Vue.auth = Axios.create(config)
+    Vue.prototype.$auth = Vue.auth = Axios.create(axiosConfig)
 
-    this.addInterceptors()
+    this.addInterceptors(Vue)
   },
 
-  addInterceptors() {
+  addInterceptors(Vue) {
     store.watch(
-      (state) => state.auth.accessToken,
+      authBinding,
       (accessToken) => {
         if (accessToken) {
           Vue.auth.defaults.headers.common['Authorization'] = accessToken
-          store.dispatch('authCompleted')
+          authCompleted(store)
         } else {
           delete Vue.auth.defaults.headers.common['Authorization']
         }

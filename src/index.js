@@ -8,7 +8,7 @@ const defaultVuexModuleName = 'api'
 export {default as vuexApiModule} from './module'
 export {default as Http} from './http'
 export {default as Auth} from './auth'
-export {default as AuthLocalStoragePlugin} from './auth/AuthLocalStoragePlugin'
+export {default as AuthLocalStoragePlugin} from './auth/authLocalStoragePlugin'
 
 export const createWatch = ({
   vuexModuleName = defaultVuexModuleName,
@@ -18,12 +18,17 @@ export const createWatch = ({
   vuexModuleName: defaultVuexModuleName,
   response: (e) => e,
   error: (e) => e
-}) => async (context, {action, request}) => {
+}) => (context, {action, request}) => {
   context.commit(`${vuexModuleName}/REQUEST_PENDING`, {action}, {root: true})
-  const [res, err] = await to(request)
-  if (res) context.commit(`${vuexModuleName}/REQUEST_SUCCESS`, {action}, {root: true})
-  if (err) context.commit(`${vuexModuleName}/REQUEST_FAILURE`, {action, error: error(err)}, {root: true})
-  return [response(res), error(err)]
+  return request
+    .then(res => {
+      context.commit(`${vuexModuleName}/REQUEST_SUCCESS`, {action}, {root: true})
+      return res
+    })
+    .catch(err => {
+      context.commit(`${vuexModuleName}/REQUEST_FAILURE`, {action, error: error(err)}, {root: true})
+      throw err
+    })
 }
 
 export const watch = createWatch()
