@@ -1,7 +1,7 @@
 import auth from './store'
 
 // LocalStorage plugin.
-const authLocalStoragePlugin = ({storageKey = 'paradise-soft'}) => {
+const AuthLocalStoragePlugin = ({storageKey = 'paradise-soft'}) => {
   // Sync with local storage.
   if (localStorage.getItem(constants.STORAGE_KEY)) {
     const syncedState = JSON.parse(localStorage.getItem(constants.STORAGE_KEY))
@@ -21,4 +21,4 @@ const authLocalStoragePlugin = ({storageKey = 'paradise-soft'}) => {
   }
 }
 
-export default authLocalStoragePlugin
+export default AuthLocalStoragePlugin

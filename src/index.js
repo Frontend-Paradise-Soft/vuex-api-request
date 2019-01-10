@@ -8,7 +8,7 @@ const defaultVuexModuleName = 'api'
 export {default as vuexApiModule} from './module'
 export {default as Http} from './http'
 export {default as Auth} from './auth'
-export {default as authLocalStoragePlugin} from './auth/authLocalStoragePlugin'
+export {default as AuthLocalStoragePlugin} from './auth/AuthLocalStoragePlugin'
 
 export const createWatch = ({
   vuexModuleName = defaultVuexModuleName,
