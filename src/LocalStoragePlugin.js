@@ -19,7 +19,7 @@ const LocalStoragePlugin = ({
     })
 
     store.subscribeAction((action, state) => {
-      if (action.type === clearMutationType) {
+      if (action.type === clearActionType) {
         localStorage.removeItem(storageKey)
       }
     })

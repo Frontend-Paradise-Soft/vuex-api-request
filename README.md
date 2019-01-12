@@ -56,7 +56,7 @@ localStorage 與 vuex 做綁定，當 vuex 的狀態會跟 localStorage 同步�
 import Vue from 'vue
 import Vuex from 'vuex'
 import auth from './modules/auth'
-import {AuthLocalStoragePlugin} from 'vuex-api-request'
+import {LocalStoragePlugin} from 'vuex-api-request'
 
 Vue.use(Vuex)
 

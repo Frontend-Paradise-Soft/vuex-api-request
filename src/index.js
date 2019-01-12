@@ -41,7 +41,7 @@ const VuexApiRequest = function({
   }
 }
 
-VuexApiRequest.prototype.createWatch = ({
+VuexApiRequest.createWatch = ({
   vuexModuleName = defaultVuexModuleName,
   response = (e) => e,
   error = (e) => e
@@ -64,6 +64,6 @@ VuexApiRequest.prototype.createWatch = ({
     })
 }
 
-VuexApiRequest.prototype.module = vuexModule
+VuexApiRequest.module = vuexModule
 
 export default VuexApiRequest
