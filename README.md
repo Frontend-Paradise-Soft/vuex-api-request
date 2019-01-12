@@ -168,7 +168,7 @@ const watch = VuexApiRequest.createWatch({
 // vuex posts module
 const actions = {
   async getPosts(context, payload) {
-    const [res] = await watch(context, 'getPosts')(fetchPosts(payload))
+    const res = await watch(context, 'getPosts')(fetchPosts(payload))
   },
 }
 ```
