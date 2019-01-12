@@ -131,7 +131,7 @@ export default {
 
 Step 1 - 安裝 VuexApiRequest 與 Vuex 做綁定
 
-```
+```js
 // store.js
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -154,7 +154,7 @@ export default new Vuex.Store({
 
 Step 2 - 建立 watch
 
-```
+```js
 import VuexApiRequest from 'vuex-api-request'
 
 const watch = VuexApiRequest.createWatch({
@@ -175,7 +175,7 @@ const actions = {
 
 在 Vue 檔取得狀態
 
-```
+```js
 <template>
   <div>
     {{vuexApiRequest('getPosts').pedding}}
