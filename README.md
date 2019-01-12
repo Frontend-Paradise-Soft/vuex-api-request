@@ -87,7 +87,7 @@ export default new Vuex.Store({
 當我們使用 LocalStoragePlugin 跟 vuex 做綁硬後，我們就可以記住使用者的登入狀態，我們可以從
 localStorage 或 vuex module state 取得 token 建立帶有 token 的請求
 
-```
+```js
 import Vue from 'vue'
 import store from '@/store'
 import {Auth} from 'vuex-api-request'
