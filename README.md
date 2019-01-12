@@ -14,7 +14,7 @@ $ yarn add vuex-api-request
 
 使用請求 Instance，我們使用 [Axios](https://github.com/axios/axios) 套件，相關設定請看 Axios。
 
-```
+```js
 import Vue from 'vue'
 import {Http} from 'vuex-api-request'
 
@@ -53,7 +53,7 @@ localStorage 與 vuex 做綁定，當 vuex 的狀態會跟 localStorage 同步�
 
 ```js
 // store.js
-import Vue from 'vue
+import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth'
 import {LocalStoragePlugin} from 'vuex-api-request'
