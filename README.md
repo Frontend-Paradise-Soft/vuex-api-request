@@ -1,60 +1,174 @@
 # Vuex Api Request
 
+減少 api 請求重複代碼，開心開發 :)
 
-### 安裝
+## 安裝
 
 ```
-$ vue add vuex-api-request
+$ yarn add vuex-api-request
 ```
 
-### 使用
+## API Document
 
-使用請求 Instance，使用方法參考 axios
+### Http
+
+使用請求 Instance，我們使用 [Axios](https://github.com/axios/axios) 套件，相關設定請看 Axios。
+
+```
+import Vue from 'vue'
+import {Http} from 'vuex-api-request'
+
+const axiosConfig = {
+  baseURL: 'http://localhoat:3002',
+}
+
+// 將請求 Instance 綁定在 Vue 上
+Vue.use(Http(axiosConfig))
+```
+在 js 檔案中使用
 
 ```js
-// js 檔案
 import Vue from 'vue'
 
-// 不需要權限的請求
-Vue.http.get(...)
-
-// 需要權限的請求
-Vue.auth.get(...)
+Vue.http.get('/posts')
 
 ```
 
+在 vue 檔案中使用
+
 ```js
-// vue 檔案
 export default {
   methods: {
     getPosts() {
-      // 不需要權限的請求
-      this.$http.get(...)
-      
-      // 需要權限的請求
-      this.$auth.get(...)
+      this.$http.get('/posts')
     },
   }
 }
 
 ```
 
-監控請求的狀態
+### LocalStoragePlugin
+
+localStorage 與 vuex 做綁定，當 vuex 的狀態會跟 localStorage 同步，可使用來儲存使用者 token 等資料
+
+```js
+// store.js
+import Vue from 'vue
+import Vuex from 'vuex'
+import auth from './modules/auth'
+import {AuthLocalStoragePlugin} from 'vuex-api-request'
+
+Vue.use(Vuex)
+
+const authLocalStoragePlugin = LocalStoragePlugin({
+  storageKey: 'paradise-soft',
+  clearActionType: 'clear',
+  vuexModule: ['auth', auth] // [moduleName, module]
+})
+
+export default new Vuex.Store({
+  state: {},
+  mutations: {},
+  actions: {
+    clear() {
+      // 當這個 action 被執行時，會順便清掉 localStorage
+    },
+  },
+  getters: {},
+  modules: {
+    auth,
+  },
+  plugins: [authLocalStoragePlugin],
+})
+```
+
+### Auth
+
+當我們使用 LocalStoragePlugin 跟 vuex 做綁硬後，我們就可以記住使用者的登入狀態，我們可以從
+localStorage 或 vuex module state 取得 token 建立帶有 token 的請求
 
 ```
-import {watch} from 'vuex-api-request'
+import Vue from 'vue'
+import store from '@/store'
+import {Auth} from 'vuex-api-request'
+
+const axiosConfig = {
+  baseURL: '/api',
+}
+
+Vue.use(
+  Auth({
+    axiosConfig,
+    headerBinding: {
+      Authorization: [store, (state) => state.auth.accessToken]
+    },
+  })
+)
+```
+在 js 檔案中使用
+
+```js
+import Vue from 'vue'
+
+Vue.auth.get('/posts')
+
+```
+
+在 vue 檔案中使用
+
+```js
+export default {
+  methods: {
+    getPosts() {
+      this.$auth.get('/posts')
+    },
+  }
+}
+
+```
+
+### VuexApiRequest
+
+Step 1 - 安裝 VuexApiRequest 與 Vuex 做綁定
+
+```
+// store.js
+import Vue from 'vue'
+import Vuex from 'vuex'
+import VuexApiRequest from 'vuex-api-request'
+
+Vue.use(Vuex)
+Vue.use(VuexApiRequest())
+
+export default new Vuex.Store({
+  state: {},
+  mutations: {},
+  actions: {},
+  getters: {},
+  modules: {
+    api: VuexApiRequest.module
+  },
+  plugins: [],
+})
+```
+
+Step 2 - 建立 watch
+
+```
+import VuexApiRequest from 'vuex-api-request'
+
+const watch = VuexApiRequest.createWatch({
+  response: (res) => res.data,
+  error: (err) => err,
+  errorHandler: (context, err) => {
+    if (err.status === 401) context.dispatch('auth/logout')
+  },
+})
 
 // vuex posts module
 const actions = {
-  async getPosts(context) {
-    const [res, err] = await watch(context, {
-      action: 'getPosts',
-      request: fetchPosts(),
-    })
-
-    if (res) context.commit('SET_POSTS', res.data)
-
-    return [res, err]
+  async getPosts(context, payload) {
+    const [res] = await watch(context, 'getPosts')(fetchPosts(payload))
   },
 }
 ```
@@ -62,11 +176,21 @@ const actions = {
 在 Vue 檔取得狀態
 
 ```
-// 請求 pedding 狀態
-this.vuexApiRequest('getPosts').pedding
+<template>
+  <div>
+    {{vuexApiRequest('getPosts').pedding}}
+    {{vuexApiRequest('getPosts').error}}
+  </div>
+</template>
 
-// 請求 error 訊息
-this.vuexApiRequest('getPosts').error
+export default {
+  computed: {
+    getPostsPedding() {
+      return this.vuexApiRequest('getPosts').pedding
+    },
+    getPostsError() {
+      return this.vuexApiRequest('getPosts').error
+    }
+  }
+}
 ```
-
-在 vendor/vuex-api-request/auth 檔案中有 auth helpers

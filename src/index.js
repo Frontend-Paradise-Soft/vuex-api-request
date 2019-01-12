@@ -1,24 +1,56 @@
 import Axios from 'axios'
-import Http from './http'
-import Auth from './auth'
-import to from './utils/to'
+import Http from './Http'
+import Auth from './Auth'
+import vuexModule from './module'
 
 const defaultVuexModuleName = 'api'
 
-export {default as vuexApiModule} from './module'
-export {default as Http} from './http'
-export {default as Auth} from './auth'
-export {default as AuthLocalStoragePlugin} from './auth/authLocalStoragePlugin'
+export {default as Http} from './Http'
+export {default as Auth} from './Auth'
+export {default as LocalStoragePlugin} from './LocalStoragePlugin'
 
-export const createWatch = ({
+const VuexApiRequest = function({
+  vuexModuleName = defaultVuexModuleName
+} = {
+  vuexModuleName: defaultVuexModuleName
+}) {
+  return {
+    install(Vue) {
+      Vue.mixin({
+        methods: {
+          vuexApiRequest(action) {
+            const apiState = this.$store.state[vuexModuleName]
+            if (!apiState) return
+  
+            return {
+              pedding: apiState.pedding[action] || false,
+              error: apiState.error[action] || null
+            }
+          },
+          clearErrorByAction(action) {
+            this.$store.dispatch(`${vuexModuleName}/clearErrorByAction`, action)
+          }
+        },
+        watch: {
+          '$route'(to, from) {
+            if (to.name !== from.name) this.$store.dispatch(`${vuexModuleName}/clearError`)
+          }
+        },
+      })
+    },
+  }
+}
+
+VuexApiRequest.prototype.createWatch = ({
   vuexModuleName = defaultVuexModuleName,
   response = (e) => e,
   error = (e) => e
 } = {
   vuexModuleName: defaultVuexModuleName,
   response: (e) => e,
-  error: (e) => e
-}) => (context, {action, request}) => {
+  error: (e) => e,
+  errorHandler: (context, err) => {}
+}) => (context, action) => (request) => {
   context.commit(`${vuexModuleName}/REQUEST_PENDING`, {action}, {root: true})
   return request
     .then(res => {
@@ -27,38 +59,11 @@ export const createWatch = ({
     })
     .catch(err => {
       context.commit(`${vuexModuleName}/REQUEST_FAILURE`, {action, error: error(err)}, {root: true})
+      errorHandler(context, err)
       throw err
     })
 }
 
-export const watch = createWatch()
+VuexApiRequest.prototype.module = vuexModule
 
-export default ({
-  vuexModuleName = defaultVuexModuleName
-} = {
-  vuexModuleName: defaultVuexModuleName
-}) => ({
-  install(Vue) {
-    Vue.mixin({
-      methods: {
-        vuexApiRequest(action) {
-          const apiState = this.$store.state[vuexModuleName]
-          if (!apiState) return
-
-          return {
-            pedding: apiState.pedding[action] || false,
-            error: apiState.error[action] || null
-          }
-        },
-        clearErrorByAction(action) {
-          this.$store.dispatch(`${vuexModuleName}/clearErrorByAction`, action)
-        }
-      },
-      watch: {
-        '$route'(to, from) {
-          if (to.name !== from.name) this.$store.dispatch(`${vuexModuleName}/clearError`)
-        }
-      },
-    })
-  },
-})
+export default VuexApiRequest

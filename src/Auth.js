@@ -2,9 +2,7 @@ import Axios from 'axios'
 
 export default ({
   axiosConfig = {},
-  store,
-  authBinding = (state) => state.auth.accessToken,
-  authCompleted = (store) => store
+  headerBinding,
 }) => ({
   install(Vue) {
     Vue.prototype.$auth = Vue.auth = Axios.create(axiosConfig)
@@ -13,12 +11,14 @@ export default ({
   },
 
   addInterceptors(Vue) {
+    if (!headerBinding) return console.error('headerBinding is required')
+    const [store, changeStateFunc] = headerBinding.Authorization
+
     store.watch(
-      authBinding,
+      changeStateFunc,
       (accessToken) => {
         if (accessToken) {
           Vue.auth.defaults.headers.common['Authorization'] = accessToken
-          authCompleted(store)
         } else {
           delete Vue.auth.defaults.headers.common['Authorization']
         }
