@@ -13,7 +13,7 @@ const LocalStoragePlugin = ({
   }
 
   return (store) => {
-    store.subscribe(() => {
+    store.subscribe((mutation, state) => {
       const syncedData = {[vuexModule[0]]: state[vuexModule[0]]}
       localStorage.setItem(storageKey, JSON.stringify(syncedData))
     })

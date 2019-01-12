@@ -44,7 +44,8 @@ const VuexApiRequest = function({
 VuexApiRequest.createWatch = ({
   vuexModuleName = defaultVuexModuleName,
   response = (e) => e,
-  error = (e) => e
+  error = (e) => e,
+  errorHandler = (context, err) => {}
 } = {
   vuexModuleName: defaultVuexModuleName,
   response: (e) => e,
