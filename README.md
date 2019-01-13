@@ -62,8 +62,8 @@ Vue.use(Vuex)
 
 const authLocalStoragePlugin = LocalStoragePlugin({
   storageKey: 'paradise-soft',
-  clearActionType: 'clear',
-  vuexModule: ['auth', auth] // [moduleName, module]
+  vuexModule: ['auth', auth], // [moduleName, module]
+  clearWhen: (action) => action.type === 'clear',
 })
 
 export default new Vuex.Store({

@@ -2,7 +2,7 @@
 const LocalStoragePlugin = ({
   storageKey = 'paradise-soft',
   vuexModule, // [moduleName, module]
-  clearActionType = 'clear'
+  clearWhen = (action) => action.type === 'clear'
 }) => {
   if (!vuexModule) return console.error('vuexModule is required')
 
@@ -19,7 +19,7 @@ const LocalStoragePlugin = ({
     })
 
     store.subscribeAction((action, state) => {
-      if (action.type === clearActionType) {
+      if (clearWhen(action)) {
         localStorage.removeItem(storageKey)
       }
     })
