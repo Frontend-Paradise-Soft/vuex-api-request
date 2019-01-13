@@ -1,27 +1,31 @@
 // LocalStorage plugin.
 const LocalStoragePlugin = ({
   storageKey = 'paradise-soft',
-  vuexModule, // [moduleName, module]
-  clearWhen = (action) => action.type === 'clear'
+  vuexModule,
+  clearWhen = (state, oldState) => {}
 }) => {
   if (!vuexModule) return console.error('vuexModule is required')
+  const [moduleName, moduleObject] = vuexModule
 
   // Sync with local storage.
   if (localStorage.getItem(storageKey)) {
     const syncedState = JSON.parse(localStorage.getItem(storageKey))
-    vuexModule[1].state = Object.assign(vuexModule[1].state, syncedState[vuexModule[0]])
+    moduleObject.state = Object.assign(moduleObject.state, syncedState[moduleName])
   }
 
   return (store) => {
-    store.subscribe((mutation, state) => {
-      const syncedData = {[vuexModule[0]]: state[vuexModule[0]]}
-      localStorage.setItem(storageKey, JSON.stringify(syncedData))
-    })
+    let oldState
 
-    store.subscribeAction((action, state) => {
-      if (clearWhen(action)) {
+    store.subscribe((mutation, state) => {
+      const syncedData = {[moduleName]: state[moduleName]}
+
+      if (oldState && clearWhen(state[moduleName], oldState && oldState[moduleName])) {
         localStorage.removeItem(storageKey)
+      } else {
+        localStorage.setItem(storageKey, JSON.stringify(syncedData))
       }
+
+      oldState = JSON.parse(JSON.stringify(syncedData))
     })
   }
 }

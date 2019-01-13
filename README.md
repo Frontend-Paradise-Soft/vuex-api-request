@@ -63,17 +63,13 @@ Vue.use(Vuex)
 const authLocalStoragePlugin = LocalStoragePlugin({
   storageKey: 'paradise-soft',
   vuexModule: ['auth', auth], // [moduleName, module]
-  clearWhen: (action) => action.type === 'clear',
+  clearWhen: (state, oldState) => !state.accessToken && oldState.accessToken
 })
 
 export default new Vuex.Store({
   state: {},
   mutations: {},
-  actions: {
-    clear() {
-      // 當這個 action 被執行時，會順便清掉 localStorage
-    },
-  },
+  actions: {},
   getters: {},
   modules: {
     auth,
