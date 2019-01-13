@@ -6,6 +6,7 @@ const INITIAL_STATE = {
 const mutations = {
   REQUEST_PENDING(state, {action}) {
     state.pedding = {...state.pedding, [action]: true}
+    state.error = {...state.error, [action]: null}
   },
   REQUEST_SUCCESS(state, {action}) {
     state.pedding = {...state.pedding, [action]: false}
