@@ -129,27 +129,15 @@ export default {
 
 ### VuexApiRequest
 
-Step 1 - 安裝 VuexApiRequest 與 Vuex 做綁定
+Step 1 - 安裝 VuexApiRequest 與 store 做綁定，及加入 VuexApiRequest mixin
 
 ```js
-// store.js
+// main.js
 import Vue from 'vue'
-import Vuex from 'vuex'
+import store from 'store'
 import VuexApiRequest from 'vuex-api-request'
 
-Vue.use(Vuex)
-Vue.use(VuexApiRequest())
-
-export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
-  getters: {},
-  modules: {
-    api: VuexApiRequest.module
-  },
-  plugins: [],
-})
+Vue.use(VuexApiRequest(store))
 ```
 
 Step 2 - 建立 watch
