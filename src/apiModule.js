@@ -39,10 +39,16 @@ const actions = {
   },
 }
 
+const getters = {
+  pedding: (state) => (action) => state.pedding[action],
+  error: (state) => (action) => state.error[action],
+}
+
 export default {
   namespaced: true,
   state: JSON.parse(JSON.stringify(INITIAL_STATE)),
   mutations,
   actions,
+  getters,
 }
 
