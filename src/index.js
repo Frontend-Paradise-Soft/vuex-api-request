@@ -6,6 +6,7 @@ import apiModule from './apiModule'
 export {default as Http} from './Http'
 export {default as Auth} from './Auth'
 export {default as LocalStoragePlugin} from './LocalStoragePlugin'
+export {default as queryStringMixin} from './queryStringMixin'
 
 const VuexApiRequest = function(store) {
   store.registerModule('api', apiModule)

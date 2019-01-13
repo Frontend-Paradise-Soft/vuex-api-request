@@ -178,3 +178,30 @@ export default {
   }
 }
 ```
+
+### queryStringMixin
+
+```js
+import queryStringMixin from '@/mixins/queryStringMixin'
+
+export default {
+  mixins: [queryStringMixin],
+  data() {
+    return {
+      filters: this.queryStringAssign({
+        page: {type: Number, default: 1},
+        per_page: {type: Number, default: 10}
+      })
+    }
+  },
+  watch: {
+    filters: {
+      handler(val) {
+        this.getPosts(this.queryStringReplace(val))
+      },
+      immediate: true,
+      deep: true,
+    }
+  }
+}
+```
