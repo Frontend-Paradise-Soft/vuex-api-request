@@ -1,29 +1,29 @@
-import Axios from 'axios'
+import Axios from 'axios';
 
-export default ({
-  axiosConfig = {},
-  headerBinding,
-}) => ({
+export default ({ axiosConfig = {}, headerBinding }) => ({
   install(Vue) {
-    Vue.prototype.$auth = Vue.auth = Axios.create(axiosConfig)
+    Vue.prototype.$auth = Vue.auth = Axios.create(axiosConfig);
 
-    this.addInterceptors(Vue)
+    this.addInterceptors(Vue);
   },
 
   addInterceptors(Vue) {
-    if (!headerBinding) return console.error('headerBinding is required')
-    const [store, changeStateFunc] = headerBinding.Authorization
+    if (!headerBinding) return console.error('headerBinding is required');
+    const [store, changeStateFunc] = headerBinding.Authorization;
 
     store.watch(
       changeStateFunc,
       (accessToken) => {
         if (accessToken) {
-          Vue.auth.defaults.headers.common['Authorization'] = accessToken
+          Vue.auth.defaults.headers.common['Authorization'] = accessToken;
         } else {
-          delete Vue.auth.defaults.headers.common['Authorization']
+          delete Vue.auth.defaults.headers.common['Authorization'];
         }
       },
-      {deep: true, immediate: true}
-    )
+      {
+        deep: true,
+        immediate: true,
+      }
+    );
   },
-})
+});
