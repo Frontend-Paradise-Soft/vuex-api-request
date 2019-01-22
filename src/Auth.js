@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-export default ({ axiosConfig = {}, headerBinding }) => ({
+export default (axiosConfig = {}, { headerBinding }) => ({
   install(Vue) {
     Vue.prototype.$auth = Vue.auth = Axios.create(axiosConfig);
 
