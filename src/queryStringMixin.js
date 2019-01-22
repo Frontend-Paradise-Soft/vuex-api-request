@@ -21,13 +21,9 @@ export default {
         }
       }
 
-      this.$router.replace({
-        query: newQuery,
-      });
+      this.$router.replace({ query: newQuery });
 
       return newQuery;
     },
   },
 };
-
-const a = {}['dsfds'];
