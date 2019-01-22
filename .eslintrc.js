@@ -16,7 +16,7 @@ module.exports = {
     semi: ['error', 'always'],
     'object-curly-spacing': ['error', 'always'],
     quotes: ['error', 'single'],
-    'comma-dangle': ['error', 'always'],
+    'comma-dangle': ["error", "only-multiline"],
     code: 120,
     'arrow-parens': ['error', 'always'],
     'import/extensions': 'off',
