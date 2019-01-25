@@ -161,18 +161,18 @@ const actions = {
 ```js
 <template>
   <div>
-    {{vuexApiRequest('getPosts').pedding}}
-    {{vuexApiRequest('getPosts').error}}
+    {{$api('getPosts').pedding}}
+    {{$api('getPosts').error}}
   </div>
 </template>
 
 export default {
   computed: {
     getPostsPedding() {
-      return this.vuexApiRequest('getPosts').pedding
+      return this.$api('getPosts').pedding
     },
     getPostsError() {
-      return this.vuexApiRequest('getPosts').error
+      return this.$api('getPosts').error
     }
   }
 }

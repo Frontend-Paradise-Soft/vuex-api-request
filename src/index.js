@@ -15,17 +15,15 @@ const VuexApiRequest = function(store) {
     install(Vue) {
       Vue.mixin({
         methods: {
-          vuexApiRequest(action) {
+          $api(action) {
             const apiState = this.$store.state.api;
             if (!apiState) return;
 
             return {
               pedding: apiState.pedding[action] || false,
               error: apiState.error[action] || null,
+              clear: () => this.$store.dispatch('api/clearErrorByAction', action),
             };
-          },
-          clearErrorByAction(action) {
-            this.$store.dispatch('api/clearErrorByAction', action);
           },
         },
         watch: {
