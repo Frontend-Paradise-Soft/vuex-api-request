@@ -9,8 +9,7 @@ export { default as LocalStoragePlugin } from './LocalStoragePlugin';
 export { default as queryStringMixin } from './queryStringMixin';
 
 const VuexApiRequest = function(store) {
-  if (store.registerModule) store.registerModule('api', apiModule);
-  else if (store.modules) store.modules.api = apiModule;
+  if (store && store.registerModule) store.registerModule('api', apiModule);
 
   return {
     install(Vue) {

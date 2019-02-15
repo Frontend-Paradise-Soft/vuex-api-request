@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 const INITIAL_STATE = {
   pedding: {},
   error: {},
@@ -5,15 +7,16 @@ const INITIAL_STATE = {
 
 const mutations = {
   REQUEST_PENDING(state, { action }) {
-    state.pedding = { ...state.pedding, [action]: true };
-    state.error = { ...state.error, [action]: null };
+    state.pedding[action] = true;
+    state.error[action] = null;
   },
   REQUEST_SUCCESS(state, { action }) {
-    state.pedding = { ...state.pedding, [action]: false };
+    state.pedding[action] = false;
   },
   REQUEST_FAILURE(state, { action, error }) {
-    state.pedding = { ...state.pedding, [action]: false };
-    state.error = { ...state.error, [action]: error };
+    // Vue.set(state.error, action, error)
+    state.pedding[action] = false;
+    state.error[action] = error;
   },
   // eslint-disable-next-line
   CLEAR(state) {
@@ -44,7 +47,7 @@ const getters = {
   peddingRequests: (state) => {
     let requests = [];
 
-    for (key in state.pedding) {
+    for (var key in state.pedding) {
       if (state.pedding[key]) requests.push(key);
     }
 
