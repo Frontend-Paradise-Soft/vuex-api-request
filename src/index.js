@@ -37,21 +37,29 @@ const VuexApiRequest = function(store) {
   };
 };
 
-VuexApiRequest.createWatch = (
-  { response = (e) => e, error = (e) => e, errorHandler = (context, err) => {} } = {
-    response: (e) => e,
-    error: (e) => e,
-    errorHandler: (context, err) => {},
-  }
-) => (context, action) => (request) => {
-  context.commit('api/REQUEST_PENDING', { action }, { root: true });
+VuexApiRequest.createWatch = ({ 
+  response = (e) => e, 
+  error = (e) => e, 
+  errorHandler = (context, err) => {},
+  watchItems = ['pending', 'error']
+} = {
+  response: (e) => e,
+  error: (e) => e,
+  errorHandler: (context, err) => {},
+  watchItems: ['pending', 'error'],
+}) => (context, action) => (request) => {
+  const watchPendingStatus = watchItems && watchItems.includes('pending')
+  const watchErrorStatus = watchItems && watchItems.includes('error')
+
+  if (watchPendingStatus) context.commit('api/REQUEST_PENDING', { action }, { root: true });
+
   return request
     .then((res) => {
       context.commit('api/REQUEST_SUCCESS', { action }, { root: true });
       return res;
     })
     .catch((err) => {
-      context.commit('api/REQUEST_FAILURE', { action, error: error(err) }, { root: true });
+      if (watchErrorStatus) context.commit('api/REQUEST_FAILURE', { action, error: error(err) }, { root: true });
       errorHandler(context, err);
       throw err;
     });

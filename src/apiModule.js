@@ -41,6 +41,15 @@ const actions = {
 
 const getters = {
   pedding: (state) => (action) => state.pedding[action],
+  peddingRequests: (state) => {
+    let requests = [];
+
+    for (key in state.pedding) {
+      if (state.pedding[key]) requests.push(key);
+    }
+
+    return requests;
+  },
   error: (state) => (action) => state.error[action],
 };
 
