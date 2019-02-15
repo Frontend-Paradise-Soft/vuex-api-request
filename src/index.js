@@ -1,6 +1,4 @@
 import Axios from 'axios';
-import Http from './Http';
-import Auth from './Auth';
 import apiModule from './apiModule';
 
 export { default as Http } from './Http';
@@ -26,11 +24,11 @@ const VuexApiRequest = function(store) {
             };
           },
         },
-        watch: {
-          $route(to, from) {
-            if (to.name !== from.name) this.$store.dispatch('api/clearError');
-          },
-        },
+        // watch: {
+        //   $route(to, from) {
+        //     if (to.name !== from.name) this.$store.dispatch('api/clearError');
+        //   },
+        // },
       });
     },
   };
@@ -45,8 +43,8 @@ VuexApiRequest.createWatch = ({
   error: (e) => e,
   errorHandler: (context, err) => {},
 }) => (context, action, watchItems = ['pending', 'error']) => (request) => {
-  const watchPendingStatus = watchItems && watchItems.includes('pending')
-  const watchErrorStatus = watchItems && watchItems.includes('error')
+  const watchPendingStatus = watchItems && watchItems.includes('pending');
+  const watchErrorStatus = watchItems && watchItems.includes('error');
 
   if (watchPendingStatus) context.commit('api/REQUEST_PENDING', { action }, { root: true });
 
