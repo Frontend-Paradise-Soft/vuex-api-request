@@ -41,13 +41,11 @@ VuexApiRequest.createWatch = ({
   response = (e) => e, 
   error = (e) => e, 
   errorHandler = (context, err) => {},
-  watchItems = ['pending', 'error']
 } = {
   response: (e) => e,
   error: (e) => e,
   errorHandler: (context, err) => {},
-  watchItems: ['pending', 'error'],
-}) => (context, action) => (request) => {
+}) => (context, action, watchItems = ['pending', 'error']) => (request) => {
   const watchPendingStatus = watchItems && watchItems.includes('pending')
   const watchErrorStatus = watchItems && watchItems.includes('error')
 
