@@ -46,7 +46,7 @@ const getters = {
 
 export default {
   namespaced: true,
-  state: JSON.parse(JSON.stringify(INITIAL_STATE)),
+  state: () => JSON.parse(JSON.stringify(INITIAL_STATE)),
   mutations,
   actions,
   getters,
