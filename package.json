@@ -1,7 +1,7 @@
 {
   "name": "vuex-api-request",
-  "version": "2.10.0",
-  "main": "./lib/index.js",
+  "version": "2.11.0",
+  "main": "./lib/VuexApiRequestPlugin.js",
   "scripts": {
     "prepublish": "./node_modules/.bin/babel src --out-dir lib"
   },
