@@ -1,18 +1,18 @@
 const INITIAL_STATE = {
-  pedding: {},
+  pending: {},
   error: {},
 };
 
 const mutations = {
   REQUEST_PENDING(state, { action }) {
-    state.pedding = { ...state.pedding, [action]: true };
+    state.pending = { ...state.pending, [action]: true };
     state.error = { ...state.error, [action]: null };
   },
   REQUEST_SUCCESS(state, { action }) {
-    state.pedding = { ...state.pedding, [action]: false };
+    state.pending = { ...state.pending, [action]: false };
   },
   REQUEST_FAILURE(state, { action, error }) {
-    state.pedding = { ...state.pedding, [action]: false };
+    state.pending = { ...state.pending, [action]: false };
     state.error = { ...state.error, [action]: error };
   },
   // eslint-disable-next-line
@@ -40,12 +40,12 @@ const actions = {
 };
 
 const getters = {
-  pedding: (state) => (action) => state.pedding[action],
-  peddingRequests: (state) => {
+  pending: (state) => (action) => state.pending[action],
+  pendingRequests: (state) => {
     const requests = [];
 
-    for (var key in state.pedding) {
-      if (state.pedding[key]) requests.push(key);
+    for (var key in state.pending) {
+      if (state.pending[key]) requests.push(key);
     }
 
     return requests;

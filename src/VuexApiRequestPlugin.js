@@ -13,7 +13,7 @@ const VuexApiRequestPlugin = function(store) {
             if (!apiState) return;
 
             return {
-              pedding: apiState.pedding[action] || false,
+              pending: apiState.pending[action] || false,
               error: apiState.error[action] || null,
               clear: () => this.$store.dispatch('api/clearErrorByAction', action),
             };
