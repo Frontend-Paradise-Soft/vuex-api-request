@@ -1,3 +1,7 @@
+const defaultConfig = {
+  watchRequestStatus: {pending: true, error: false},
+}
+
 export default ({
   response = (e) => e, 
   error = (e) => e, 
@@ -6,11 +10,8 @@ export default ({
   response: (e) => e,
   error: (e) => e,
   errorHandler: (context, err) => {},
-}) => (context, action, watchItems = ['pending', 'error']) => (request) => {
-  const watchPendingStatus = watchItems && watchItems.includes('pending');
-  const watchErrorStatus = watchItems && watchItems.includes('error');
-
-  if (watchPendingStatus) context.commit('api/REQUEST_PENDING', { action }, { root: true });
+}) => (context, action, watchRequestStatus = defaultConfig.watchRequestStatus) => (request) => {
+  if (watchRequestStatus.pending) context.commit('api/REQUEST_PENDING', { action }, { root: true });
 
   return request
     .then((res) => {
@@ -18,7 +19,7 @@ export default ({
       return res;
     })
     .catch((err) => {
-      if (watchErrorStatus) context.commit('api/REQUEST_FAILURE', { action, error: error(err) }, { root: true });
+      if (watchRequestStatus.error) context.commit('api/REQUEST_FAILURE', { action, error: error(err) }, { root: true });
       errorHandler(context, err);
       throw err;
     });
