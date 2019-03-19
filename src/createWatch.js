@@ -11,7 +11,8 @@ export default ({
   error: (e) => e,
   errorHandler: (context, err) => {},
 }) => (context, action, watchRequestStatus = defaultConfig.watchRequestStatus) => (request) => {
-  if (watchRequestStatus.pending) context.commit('api/REQUEST_PENDING', { action }, { root: true });
+  const isBrowser = typeof window !== 'undefined'
+  if (watchRequestStatus.pending && isBrowser) context.commit('api/REQUEST_PENDING', { action }, { root: true });
 
   return request
     .then((res) => {
